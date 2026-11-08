@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
 import ClientLayout from "@/components/ClientLayout";
 
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,8 +32,7 @@ export default function RootLayout({ children }) {
     <ClientLayout>
       {children}
     </ClientLayout>
-
-      
+          
       </body>
     </html>
   );

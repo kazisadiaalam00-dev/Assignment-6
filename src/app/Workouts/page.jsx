@@ -10,8 +10,6 @@ export default async function WorkoutPage() {
         <Banner />
        
         <AllProducts products={products} />
-
-
     </div>
   );
 }
