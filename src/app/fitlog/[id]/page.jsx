@@ -1,9 +1,9 @@
 'use client';
-import React, { use, useState } from 'react';
+import React, { Suspense, use, useEffect, useState } from 'react';
 import { getSingleProduct } from '@/library/api';
 import { useProductContext } from '@/context/ProductContext';
 
-const DetailsPage = ({ params }) => {
+const DetailsContent = ({ params }) => {
     const resolvedParams = use(params);
     const id = resolvedParams?.id;
 
@@ -13,15 +13,17 @@ const DetailsPage = ({ params }) => {
 
     const { addToBuildList, addToWishList } = useProductContext();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (id) {
-            getSingleProduct(id).then((rawData) => {
-                const foundProduct = rawData?.data || rawData;
-                setProduct(foundProduct);
-                setLoading(false);
-            }).catch(() => {
-                setLoading(false);
-            });
+            getSingleProduct(id)
+                .then((rawData) => {
+                    const foundProduct = rawData?.data || rawData;
+                    setProduct(foundProduct);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
         }
     }, [id]);
 
@@ -39,6 +41,7 @@ const DetailsPage = ({ params }) => {
             </div>
         );
     }
+
     if (!product) {
         return (
             <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center">
@@ -58,13 +61,14 @@ const DetailsPage = ({ params }) => {
     const duration = product.duration || product.durationMinutes || "25 min";
     const calories = product.caloriesBurned || product.calories || "180 kcal";
     const rating = product.rating || "4.8";
-    
+
     const instructions = product.instructions || [
         "Lie on the bench with eyes under the bar and feet planted.",
         "Unrack with locked elbows and lower the bar to mid-chest.",
         "Press up in a slight arc until elbows lock without bouncing.",
         "Keep shoulder blades pinched and a natural arch in the back."
     ];
+
     const handleAddToTodayPlan = () => {
         addToBuildList(product);
         triggerToast("Added to today's plan");
@@ -77,7 +81,7 @@ const DetailsPage = ({ params }) => {
 
     return (
         <div className="min-h-screen bg-zinc-950 text-white px-4 md:px-12 py-10 relative">
-            
+
             {toastMessage && (
                 <div className="fixed bottom-8 right-8 bg-lime-400 text-black font-bold px-5 py-3 rounded-xl shadow-2xl z-50 transition-all animate-bounce">
                     {toastMessage}
@@ -85,12 +89,12 @@ const DetailsPage = ({ params }) => {
             )}
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-                
+
                 <div className="w-full bg-[#12141a] border border-zinc-800/80 rounded-3xl p-4 flex justify-center items-center shadow-2xl">
                     {image ? (
-                        <img 
-                            src={image} 
-                            alt={title} 
+                        <img
+                            src={image}
+                            alt={title}
                             className="w-full h-[400px] sm:h-[550px] object-cover rounded-2xl"
                         />
                     ) : (
@@ -99,7 +103,7 @@ const DetailsPage = ({ params }) => {
                         </div>
                     )}
                 </div>
-                
+
                 <div className="space-y-6">
                     <div>
                         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3 uppercase">
@@ -109,12 +113,12 @@ const DetailsPage = ({ params }) => {
                             {description}
                         </p>
                     </div>
-                    
+
                     {tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                             {tags.map((tag, index) => (
-                                <span 
-                                    key={index} 
+                                <span
+                                    key={index}
                                     className="bg-lime-400 text-black text-xs font-bold px-3 py-1 rounded uppercase tracking-wider"
                                 >
                                     {tag}
@@ -122,7 +126,7 @@ const DetailsPage = ({ params }) => {
                             ))}
                         </div>
                     )}
-                   
+
                     <div className="bg-[#12141a] border border-zinc-800/80 rounded-2xl overflow-hidden divide-y divide-zinc-800/60 text-sm">
                         <div className="flex justify-between px-6 py-4">
                             <span className="text-zinc-400 font-medium">EQUIPMENT</span>
@@ -168,13 +172,13 @@ const DetailsPage = ({ params }) => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button 
+                        <button
                             onClick={handleAddToTodayPlan}
                             className="flex-1 bg-lime-400 hover:bg-lime-500 text-black font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer"
                         >
                             <span>📋 Add to today's plan</span>
                         </button>
-                        <button 
+                        <button
                             onClick={handleSaveForLater}
                             className="flex-1 bg-transparent hover:bg-zinc-900 text-white border border-zinc-700 font-semibold py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-sm cursor-pointer"
                         >
@@ -186,6 +190,20 @@ const DetailsPage = ({ params }) => {
 
             </div>
         </div>
+    );
+};
+
+const DetailsPage = ({ params }) => {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center">
+                    <p className="text-zinc-400">Loading workout details...</p>
+                </div>
+            }
+        >
+            <DetailsContent params={params} />
+        </Suspense>
     );
 };
 
