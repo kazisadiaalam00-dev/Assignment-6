@@ -7,7 +7,7 @@ const PlanPage = () => {
 
                   
         
-                <MyPlan />
+               <MyPlan />
 
             </div>
         

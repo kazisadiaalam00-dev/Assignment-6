@@ -60,8 +60,8 @@ const MyPlanPage = () => {
                         <button
                             onClick={() => setActiveTab('today')}
                             className={`px-5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'today'
-                                ? 'bg-zinc-800 text-white shadow'
-                                : 'text-zinc-400 hover:text-white'
+                                    ? 'bg-zinc-800 text-white shadow'
+                                    : 'text-zinc-400 hover:text-white'
                                 }`}
                         >
                             Today's Plan
@@ -69,8 +69,8 @@ const MyPlanPage = () => {
                         <button
                             onClick={() => setActiveTab('saved')}
                             className={`px-5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'saved'
-                                ? 'bg-zinc-800 text-white shadow'
-                                : 'text-zinc-400 hover:text-white'
+                                    ? 'bg-zinc-800 text-white shadow'
+                                    : 'text-zinc-400 hover:text-white'
                                 }`}
                         >
                             Saved
@@ -142,18 +142,18 @@ const MyPlanPage = () => {
                                             {activeTab === 'today' && (
                                                 <button
                                                     onClick={() => removeFromBuildList(item.id)}
-                                                    className="bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-lg font-medium text-[11px]"
+                                                    className="bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-lg font-medium text-[11px] cursor-pointer"
                                                 >
                                                     Mark as Done
                                                 </button>
                                             )}
                                             <button
-                                                onClick={() =>  activeTab === 'today'
-                                                   
+                                                onClick={() =>
+                                                    activeTab === 'today'
                                                         ? removeFromBuildList(item.id)
                                                         : removeFromWishList(item.id)
                                                 }
-                                                className="text-zinc-500 hover:text-red-400 p-1 font-bold"
+                                                className="text-zinc-500 hover:text-red-400 p-1 font-bold cursor-pointer"
                                                 title="Remove"
                                             >
                                                 ✕
@@ -170,3 +170,5 @@ const MyPlanPage = () => {
         </div>
     );
 };
+
+export default MyPlanPage;
